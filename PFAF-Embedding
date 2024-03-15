@@ -1,0 +1,51 @@
+import numpy as np
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
+from Crypto.Random import get_random_bytes
+
+def generate_pfaf_embedding(token):
+    # Apply P-FAF transformation to token to generate fractal embedding
+    pfaf_embedding = apply_pfaf(token)
+    return pfaf_embedding
+
+def encrypt_pfaf_embedding(pfaf_embedding, encryption_key):
+    embedding_bytes = pfaf_embedding.tobytes()
+    padded_bytes = pad(embedding_bytes, AES.block_size)
+    iv = get_random_bytes(AES.block_size)
+    cipher = AES.new(encryption_key, AES.MODE_CBC, iv)
+    encrypted_bytes = cipher.encrypt(padded_bytes)
+    return iv + encrypted_bytes
+
+def decrypt_pfaf_embedding(encrypted_embedding, decryption_key):
+    iv = encrypted_embedding[:AES.block_size]
+    encrypted_bytes = encrypted_embedding[AES.block_size:]
+    cipher = AES.new(decryption_key, AES.MODE_CBC, iv)
+    decrypted_bytes = cipher.decrypt(encrypted_bytes)
+    try:
+        unpadded_bytes = unpad(decrypted_bytes, AES.block_size)
+    except ValueError:
+        raise Exception("Incorrect decryption")
+    pfaf_embedding = np.frombuffer(unpadded_bytes, dtype=np.float32)
+    return pfaf_embedding
+
+def generate_encrypted_token(token, encryption_key):
+    pfaf_embedding = generate_pfaf_embedding(token)
+    encrypted_token = encrypt_pfaf_embedding(pfaf_embedding, encryption_key)
+    return encrypted_token
+
+def decrypt_token(encrypted_token, decryption_key):
+    pfaf_embedding = decrypt_pfaf_embedding(encrypted_token, decryption_key)
+    # Apply inverse P-FAF transformation to obtain the original token or its semantic representation
+    original_token = apply_inverse_pfaf(pfaf_embedding)
+    return original_token
+
+# Example usage
+encryption_key = get_random_bytes(32)  # Generate a random 32-byte encryption key
+decryption_key = encryption_key  # In this example, the decryption key is the same as the encryption key
+
+input_token = "Hello, World!"
+encrypted_token = generate_encrypted_token(input_token, encryption_key)
+print("Encrypted Token:", encrypted_token)
+
+decrypted_token = decrypt_token(encrypted_token, decryption_key)
+print("Decrypted Token:", decrypted_token)
