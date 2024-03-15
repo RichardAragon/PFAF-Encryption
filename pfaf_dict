@@ -1,0 +1,10 @@
+def pfaf_dict(token_dict, embedding_size=128, max_iterations=100):
+    # Create an empty dictionary to store the fractal embeddings for each token
+    pfaf_embeddings = {}
+    
+    # Generate fractal embeddings for each token in the dictionary
+    for token in token_dict:
+        token_embedding = apply_pfaf(token, embedding_size, max_iterations)
+        pfaf_embeddings[token] = token_embedding
+    
+    return pfaf_embeddings
