@@ -1,0 +1,22 @@
+import numpy as np
+
+def apply_inverse_pfaf(pfaf_embedding, token_dict, embedding_size=128, max_iterations=100):
+    # Create a dictionary to store the fractal embeddings for each token
+    pfaf_dict = {}
+    
+    # Generate fractal embeddings for each token in the dictionary
+    for token in token_dict:
+        token_embedding = apply_pfaf(token, embedding_size, max_iterations)
+        pfaf_dict[token] = token_embedding
+    
+    # Find the nearest neighbor token for the given fractal embedding
+    min_distance = float('inf')
+    nearest_token = None
+    
+    for token, token_embedding in pfaf_dict.items():
+        distance = np.linalg.norm(pfaf_embedding - token_embedding)
+        if distance < min_distance:
+            min_distance = distance
+            nearest_token = token
+    
+    return nearest_token
