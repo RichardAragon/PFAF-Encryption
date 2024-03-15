@@ -1,5 +1,64 @@
 # PFAF-Encryption
 
+PFAF Encryption is a novel encryption technique that combines the principles of fractal mathematics and cryptography to enhance the security of token embeddings in artificial intelligence (AI) systems. This project provides an implementation of the PFAF encryption algorithm in Python.
+
+Overview
+The PFAF encryption algorithm leverages fractal activation functions to generate unique and complex embeddings for input tokens. These fractal embeddings are then encrypted using the Advanced Encryption Standard (AES) in Cipher Block Chaining (CBC) mode. The resulting encrypted tokens provide an additional layer of security, making it difficult for unauthorized parties to access or manipulate the underlying data.
+
+Features
+Fractal embedding generation using the Julia fractal activation function
+Encryption of fractal embeddings using AES-CBC
+Decryption of encrypted tokens to retrieve the original fractal embeddings
+Nearest neighbor search for approximate inverse transformation
+Customizable embedding size and maximum iterations for fractal computation
+
+Installation
+
+Clone the repository
+
+Install the required dependencies:
+
+pip install numpy pycryptodome
+
+Usage
+
+Import the necessary functions:
+
+from pfaf_encryption import apply_pfaf, encrypt_pfaf_embedding, decrypt_pfaf_embedding, generate_encrypted_token, decrypt_token, pfaf_dict
+
+Generate fractal embeddings for tokens:
+
+token = "Hello, World!"
+pfaf_embedding = apply_pfaf(token)
+
+Encrypt the fractal embedding:
+
+encryption_key = get_random_bytes(32)
+encrypted_token = encrypt_pfaf_embedding(pfaf_embedding, encryption_key)
+
+Decrypt the encrypted token:
+
+decryption_key = encryption_key
+decrypted_embedding = decrypt_pfaf_embedding(encrypted_token, decryption_key)
+
+Generate encrypted tokens for a dictionary of tokens:
+
+token_dict = {"apple": 0, "banana": 1, "cherry": 2}
+pfaf_embeddings = pfaf_dict(token_dict)
+
+For detailed usage examples and function descriptions, please refer to the documentation.
+
+Contributing
+Contributions are welcome! If you encounter any issues or have suggestions for improvements, please open an issue or submit a pull request.
+
+License
+This project is currently only available for individual licensing.
+
+Acknowledgements
+
+The PFAF encryption algorithm is based on the research involving Calculus based PFAF Fractals by Richard Aragon.
+The AES encryption implementation utilizes the PyCryptodome library.
+
 1. Initialization:
    - Define a set of fractal activation functions (P-FAF) for embedding: {f₁, f₂, ..., fₙ}.
    - Generate or obtain the encryption key and decryption key.
