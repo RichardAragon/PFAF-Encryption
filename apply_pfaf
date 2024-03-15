@@ -1,0 +1,34 @@
+import numpy as np
+
+def julia_fractal(z, c, max_iterations):
+    iterations = 0
+    while np.abs(z) < 2 and iterations < max_iterations:
+        z = z**2 + c
+        iterations += 1
+    return iterations
+
+def apply_pfaf(token, embedding_size=128, max_iterations=100):
+    # Convert token to a numerical representation
+    token_num = sum(ord(char) for char in token)
+    
+    # Generate a random complex constant for the Julia fractal
+    c = complex(np.random.rand(), np.random.rand())
+    
+    # Create an empty array to store the fractal embedding
+    pfaf_embedding = np.zeros(embedding_size, dtype=np.float32)
+    
+    # Generate the fractal embedding
+    for i in range(embedding_size):
+        # Map the index to a complex number in the range [-2, 2]
+        z = complex(4 * (i / embedding_size) - 2, 0)
+        
+        # Compute the number of iterations using the Julia fractal
+        iterations = julia_fractal(z, c, max_iterations)
+        
+        # Normalize the iterations and store in the embedding array
+        pfaf_embedding[i] = iterations / max_iterations
+    
+    # Scale the embedding based on the token's numerical representation
+    pfaf_embedding *= token_num / embedding_size
+    
+    return pfaf_embedding
